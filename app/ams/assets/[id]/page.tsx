@@ -1,8 +1,8 @@
 import { getRole, getSession } from "@/lib/auth";
 
 
-export default async function Page({params}:{params: {slug: string}}){
-    const id = await params.slug;
+export default async function Page({params}:{params: {id: string}}){
+    const id = await params.id;
     const session = await getSession();
     const userRole = await getRole()
     return (
