@@ -1,3 +1,6 @@
+import React from "react";
 export default async function Page(){
-    return <></>
+    return <>
+    <h1>Assets</h1>
+    </>
 }
