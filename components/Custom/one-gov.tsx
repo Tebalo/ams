@@ -1,114 +1,124 @@
 'use client'
-import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useForm } from 'react-hook-form'
-import {z} from 'zod'
+import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-  } from "@/components/ui/form"
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
 import { login } from "@/lib/auth"
-import { useRouter } from "next/navigation"
 
-interface UserCredentials{
-    email: string,
-    password: string,
+const FormSchema = z.object({
+    email: z.string().min(1, "This field is required"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+})
+
+type FormData = z.infer<typeof FormSchema>
+
+interface Response {
+    refresh?: string;
+    access?: string;
+    roles?: string[];
+    detail?: string;
 }
-interface Response{
-    refresh: string;
-    access: string;
-    roles: string[];
-    detail: string;
-}
+
 export const OneGovID: React.FC = () => {
     const router = useRouter()
-    const FormSchema = z.object({
-        email: z.string(),
-        password: z.string()
-    })
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema)
-    })
     const [response, setResponse] = useState<Response | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [redirecting, setIsRedirecting] = useState(false);
-    async function onSubmit(data: z.infer<typeof FormSchema>){
-        setIsLoading(true)
-        const formData = new FormData();
-        
-        formData.append('username', data.email);
-        formData.append('password', data.password);
-        
-        const res = await login(formData);
-        setResponse(res || null)
-        if(res?.access){
-            setIsLoading(false)
-            setIsRedirecting(true)
-            router.push('/ams/home')   
+
+    const form = useForm<FormData>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+    })
+
+    async function onSubmit(data: FormData) {
+        setIsLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append('username', data.email);
+            formData.append('password', data.password);
+            
+            const sessionData = await login(formData);
+            
+            if (sessionData?.auth?.access) {
+                setIsRedirecting(true);
+                router.push('/ams/dashboard');
+            } else {
+                // If login was unsuccessful but didn't throw an error
+                setResponse({ detail: 'Login unsuccessful. Please check your credentials.' });
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            setResponse({ 
+                detail: error instanceof Error ? error.message : 'An error occurred during login. Please try again.' 
+            } as Response);
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false)
     }
-    const email = form.watch('email');
-    const password = form.watch('password');
-    return(
-        <>
+
+    return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="grid gap-4 py-4">
-                    <span className="text-red-600 text-sm">{response?.detail}</span>
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({field}) =>{
-                            return <FormItem>
-                                <FormLabel>1Gov ID</FormLabel>
-                                <FormControl>
-                                    <Input
-                                    placeholder=""
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {response?.detail && (
+                    <p className="text-red-600 text-sm">{response.detail}</p>
+                )}
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>1Gov ID</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="Enter your 1Gov ID"
                                     type="text"
                                     {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage/>
-                            </FormItem>
-                        }}
-                    /> 
-                    <FormField
-                            control={form.control}
-                            name="password"
-                            render={({field}) =>{
-                                return <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                        placeholder=""
-                                        type="password"
-                                        {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            }}
-                        /> 
-                        <Button type="submit" disabled={isLoading || redirecting}>
-                            {isLoading ? (
-                                <>authenticating...</>
-                            ) : redirecting ? (
-                                <>redirecting...</>
-                            ) : (
-                                <>Submit</>
-                            )}
-                        </Button>
-                </div>
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                /> 
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="Enter your password"
+                                    type="password"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                /> 
+                <Button 
+                    type="submit" 
+                    disabled={isLoading || redirecting}
+                    className="w-full"
+                >
+                    {isLoading ? 'Authenticating...' : 
+                     redirecting ? 'Redirecting...' : 'Submit'}
+                </Button>
             </form>
         </Form>
-        </>
     )
 }

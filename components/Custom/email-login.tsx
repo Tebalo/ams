@@ -127,7 +127,7 @@ export const InputOTPControlled: React.FC<OTPProps> = ({username, password}) => 
             
             if(res?.access_token){
                 await DeTokenize(res?.access_token);
-                router.push('/trls/home')
+                router.push('/trls/dashboard')
                 // await setDetokenizedAccessToken(token)
                 // redirect('/trls/home')
             }else{

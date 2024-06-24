@@ -9,8 +9,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "AMS",
-  description: "Asset management service",
+  title: "CAMS",
+  description: "Confiscated Asset Management Service",
 };
 
 export default function RootLayout({

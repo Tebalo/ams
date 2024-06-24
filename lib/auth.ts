@@ -14,21 +14,54 @@ import { DeTokenizeUrl, authUrl, secretKey, validateUrl } from './store';
 
 const key = new TextEncoder().encode(secretKey);
 
-export async function getRole() {
-  const session = await getSession();
-  let userRole = '';
-  const roles = ['MANAGER', 'REGISTRATION_OFFICER', 'SNR_REGISTRATION_OFFICER', , 'DIRECTOR', 'REGISTRAR', 'LICENSE_OFFICER', 'SNR_LICENSE_OFFICER', 'LICENSE_MANAGER', 'ADMIN'];
-  
-  if(!session?.user?.realm_access){
+interface Profile {
+  roles: number[];
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+}
+
+interface Session {
+  auth: {
+    access: string;
+  };
+  profile: Profile;
+}
+
+const roleMap: { [key: number]: string } = {
+  12: 'record_officer',
+  13: 'admin',
+  14: 'finance_officer',
+  15: 'manager',
+  // Add other role mappings here
+};
+
+const rolePriority = ['admin', 'manager', 'finance_officer', 'record_officer'];
+
+export async function getRole(): Promise<string> {
+  try {
+    const session = await getSession() as Session | null;
+
+    if (!session?.auth?.access) {
       redirect('/welcome');
-  }
-  for(const role of session?.user?.realm_access?.roles || []){
-      if(roles.includes(role)){
-          userRole = await role;
-          break;
+    }
+
+    const roles = session.profile?.roles || [];
+    const userRoles = roles.map(roleId => roleMap[roleId]).filter(Boolean);
+
+    // Return the highest priority role the user has
+    for (const role of rolePriority) {
+      if (userRoles.includes(role)) {
+        return role;
       }
+    }
+
+    return ''; // No matching role found
+  } catch (error) {
+    console.error('Error getting user role:', error);
+    redirect('/welcome'); // Redirect on error
   }
-  return userRole;
 }
 
 export async function encrypt(payload: any) {
@@ -66,29 +99,72 @@ export async function experiment(formData: FormData){
 
   return res
 }
-export async function login(formData: FormData) {
 
-    const payload = {
-        username: formData.get('username'),
-        password: formData.get('password')
+export async function login(formData: FormData) {
+  const payload = {
+    username: formData.get('username'),
+    password: formData.get('password')
+  };
+
+  try {
+    // Login request
+    const loginRes = await fetch(`${authUrl}login/`, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!loginRes.ok) {
+      throw new Error(`HTTP error! status: ${loginRes.status}`);
     }
-    try{
-        const res = await fetch(`${authUrl}login/`,{
-            method: 'POST',
-            cache:'no-cache',
-            headers: {
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify({...payload}),
-        })
-        return res.json()
-    } catch(error){
-      if (isRedirectError(error)) {
-        throw error;
-        }
-      throw error
+
+    const auth = await loginRes.json();
+
+    // Fetch profile information
+    const profileRes = await fetch(`${authUrl}profile/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${auth.access}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!profileRes.ok) {
+      throw new Error(`HTTP error! status: ${profileRes.status}`);
     }
+
+    const profile = await profileRes.json();
+
+    // Combine auth and profile data
+    const sessionData = {
+      auth,
+      profile
+    };
+
+    // Create the session
+    const expires = new Date(Date.now() + 3600 * 1000); // 1 hour from now
+    const session = await encrypt({ ...sessionData, expires });
+
+    // Save the session in a cookie
+    cookies().set("session", session, { 
+      expires, 
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+
+    return sessionData; // Return the combined auth and profile data
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+    console.error('Login error:', error);
+    throw new Error('An error occurred during login. Please try again.');
   }
+}
   export async function validateOTP(username: string, otp: string) {
     const payload = {
         username: username,
