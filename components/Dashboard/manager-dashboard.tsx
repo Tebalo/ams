@@ -2,13 +2,66 @@ import { Suspense } from "react";
 import { SmallLoadingSkeleton } from "@/components/Custom/loading-skeleton";
 import { PageTitle } from "@/components/Custom/page-title";
 import { ServiceListWrapper } from "@/components/Custom/service-list-wrapper";
+import { BeakerIcon } from '@heroicons/react/24/solid'
 import { SearchIcon } from "lucide-react";
+
+const services = [
+  { 
+    icon: 'FaBuilding', 
+    title: 'Real Estate', 
+    count: 57, 
+    route: '/services/real-estate',
+    color: 'bg-blue-500'
+  },
+  { 
+    icon: 'FaMoneyBillWave', 
+    title: 'Money', 
+    count: null, 
+    route: '/services/money',
+    color: 'bg-green-500'
+  },
+  { 
+    icon: 'FaPaw', 
+    title: 'Biological assets', 
+    count: 600, 
+    route: '/services/biological-assets',
+    color: 'bg-yellow-500'
+  },
+  { 
+    icon: 'FaTruck', 
+    title: 'Vehicles, Plant and Equipment', 
+    count: 100, 
+    route: '/services/vehicles-equipment',
+    color: 'bg-red-500'
+  },
+  { 
+    icon: 'FaBoxOpen', 
+    title: 'Personal effects', 
+    count: null, 
+    route: '/services/personal-effects',
+    color: 'bg-purple-500'
+  },
+  { 
+    icon: 'FaChair', 
+    title: 'Office equipment and furniture', 
+    count: null, 
+    route: '/services/office-equipment',
+    color: 'bg-indigo-500'
+  },
+  { 
+    icon: 'FaPaintBrush', 
+    title: 'Artefacts', 
+    count: null, 
+    route: '/services/artefacts',
+    color: 'bg-pink-500'
+  },
+];
 
 export const ManagerDashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <PageTitle Title="Teacher Registration and Licensing" />
+        <PageTitle Title="Confiscated Asset Management Services" />
       </div>
 
       <div className="mb-12">
@@ -20,7 +73,7 @@ export const ManagerDashboard = () => {
             <input
               type="text"
               id="search"
-              placeholder="Search all available e-Services by name, category, description..."
+              placeholder="Search all available asset by name, category, description..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -46,12 +99,12 @@ export const ManagerDashboard = () => {
               d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
             />
           </svg>
-          <h2 className="text-xl font-semibold text-gray-800">Service Categories</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Asset Categories</h2>
         </div>
       </div>
 
       <Suspense fallback={<LoadingServiceCategories />}>
-        <ServiceListWrapper />
+        <ServiceListWrapper services={services} />
       </Suspense>
     </div>
   );
