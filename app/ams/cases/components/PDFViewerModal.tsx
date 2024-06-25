@@ -16,9 +16,16 @@ interface PDFViewerModalProps {
 export const PDFViewerModal: React.FC<PDFViewerModalProps> = ({ isOpen, onClose, pdfUrl }) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [error, setError] = useState<string | null>(null);
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
+    setError(null);
+  }
+
+  function onDocumentLoadError(error: Error) {
+    console.error('Error loading PDF:', error);
+    setError('Failed to load PDF. You can try downloading it instead.');
   }
 
   return (
@@ -27,22 +34,32 @@ export const PDFViewerModal: React.FC<PDFViewerModalProps> = ({ isOpen, onClose,
         <DialogHeader>
           <DialogTitle>Valuation Report</DialogTitle>
         </DialogHeader>
-        <div className="overflow-y-auto max-h-[80vh]">
-          <Document
-            file={pdfUrl}
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            {Array.from(new Array(numPages), (el, index) => (
-              <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-            ))}
-          </Document>
-        </div>
+        {error ? (
+          <div className="text-red-500 mb-4">{error}</div>
+        ) : (
+          <div className="overflow-y-auto max-h-[80vh]">
+            <Document
+              file={pdfUrl}
+              onLoadSuccess={onDocumentLoadSuccess}
+              onLoadError={onDocumentLoadError}
+            >
+              {Array.from(new Array(numPages), (el, index) => (
+                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+              ))}
+            </Document>
+          </div>
+        )}
         <div className="flex justify-between mt-4">
-          <Button onClick={() => setPageNumber(prev => Math.max(prev - 1, 1))}>Previous</Button>
-          <p>
-            Page {pageNumber} of {numPages}
-          </p>
-          <Button onClick={() => setPageNumber(prev => Math.min(prev + 1, numPages || 1))}>Next</Button>
+          {!error && (
+            <>
+              <Button onClick={() => setPageNumber(prev => Math.max(prev - 1, 1))}>Previous</Button>
+              <p>
+                Page {pageNumber} of {numPages}
+              </p>
+              <Button onClick={() => setPageNumber(prev => Math.min(prev + 1, numPages || 1))}>Next</Button>
+            </>
+          )}
+          <Button onClick={() => window.open(pdfUrl, '_blank')}>Download PDF</Button>
         </div>
       </DialogContent>
     </Dialog>

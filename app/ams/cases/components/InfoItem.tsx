@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { PDFViewerModal } from './PDFViewerModal';
+import { Button } from "@/components/ui/button";
 
 interface InfoItemProps {
   label: string;
@@ -22,12 +23,9 @@ const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => {
       <p className="text-sm text-gray-600">{label}</p>
       {isPDFLink ? (
         <>
-          <p 
-            className="font-medium text-blue-600 cursor-pointer hover:underline" 
-            onClick={handleOpenPDF}
-          >
-            View Report
-          </p>
+          <Button onClick={handleOpenPDF} variant="outline" size="sm">
+            View/Download Report
+          </Button>
           <PDFViewerModal 
             isOpen={isModalOpen} 
             onClose={() => setIsModalOpen(false)} 
@@ -40,5 +38,4 @@ const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => {
     </div>
   );
 };
-
 export default InfoItem;

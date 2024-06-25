@@ -40,10 +40,10 @@ interface InfoCardProps {
 // </div>
 // );
 
-interface InfoItemProps {
-    label: string;
-    value: string | number | null | undefined;
-}
+// interface InfoItemProps {
+//     label: string;
+//     value: string | number | null | undefined;
+// }
 
 // const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => (
 //     <div>
