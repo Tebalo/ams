@@ -50,7 +50,6 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
       await updateCaseById(params.id, caseDetails)
       router.push(`/ams/cases/${params.id}`)
     } catch (error) {
-      router.push(`/ams/cases/${params.id}`)
       console.error('Failed to update case:', error)
     } finally {
       setIsSaving(false)
@@ -137,12 +136,13 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
           <SelectValue placeholder="Select asset type" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Real Estate">Real Estate</SelectItem>
-          <SelectItem value="Vehicle">Vehicle</SelectItem>
-          <SelectItem value="Jewelry">Jewelry</SelectItem>
-          <SelectItem value="Financial Asset">Financial Asset</SelectItem>
-          <SelectItem value="Personal Effects">Personal Effects</SelectItem>
-          <SelectItem value="Other">Other</SelectItem>
+              <SelectItem value="Real Estate">Real Estate</SelectItem>
+              <SelectItem value="Vehicle, Plant and Equipment">Vehicle, Plant and Equipment</SelectItem>
+              <SelectItem value="Personal Effects">Personal Effects</SelectItem>
+              <SelectItem value="Biological Assets">Biological Assets</SelectItem>
+              <SelectItem value="Office equipment and furniture">Office equipment and furniture</SelectItem>
+              <SelectItem value="Artefacts">Artefacts</SelectItem>
+              <SelectItem value="Money">Money</SelectItem>
         </SelectContent>
       </Select>
     </div>
