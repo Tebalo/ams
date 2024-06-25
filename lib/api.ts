@@ -113,7 +113,7 @@ interface AssetUpdatePayload {
 
 export async function updateCaseById(code: string, updateData: AssetUpdatePayload): Promise<{ message: string; code: string }> {
   try {
-    const response = await fetch(`${apiUrl}/assets/${code}`, {
+    const response = await fetch(`${apiUrl}/update-data`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
