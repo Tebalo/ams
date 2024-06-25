@@ -50,6 +50,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
       await updateCaseById(params.id, caseDetails)
       router.push(`/ams/cases/${params.id}`)
     } catch (error) {
+      router.push(`/ams/cases/${params.id}`)
       console.error('Failed to update case:', error)
     } finally {
       setIsSaving(false)
@@ -121,59 +122,79 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Asset Details</CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type</label>
-              <Input
-                type="text"
-                id="type"
-                name="type"
-                value={caseDetails.type}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="value" className="block text-sm font-medium text-gray-700">Value</label>
-              <Input
-                type="text"
-                id="value"
-                name="value"
-                value={caseDetails.value}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="condition" className="block text-sm font-medium text-gray-700">Condition</label>
-              <Input
-                type="text"
-                id="condition"
-                name="condition"
-                value={caseDetails.condition}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
-              <Select
-                name="status"
-                value={caseDetails.status}
-                onValueChange={(value) => handleInputChange({ target: { name: 'status', value } } as any)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Pre-Confiscated">Pre-Confiscated</SelectItem>
-                  <SelectItem value="Confiscated">Confiscated</SelectItem>
-                  <SelectItem value="Disposed">Disposed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
+  <CardHeader>
+    <CardTitle>Asset Details</CardTitle>
+  </CardHeader>
+  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type</label>
+      <Select
+        name="type"
+        value={caseDetails.type}
+        onValueChange={(value) => handleInputChange({ target: { name: 'type', value } } as any)}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select asset type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="Real Estate">Real Estate</SelectItem>
+          <SelectItem value="Vehicle">Vehicle</SelectItem>
+          <SelectItem value="Jewelry">Jewelry</SelectItem>
+          <SelectItem value="Financial Asset">Financial Asset</SelectItem>
+          <SelectItem value="Personal Effects">Personal Effects</SelectItem>
+          <SelectItem value="Other">Other</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+    <div>
+      <label htmlFor="value" className="block text-sm font-medium text-gray-700">Value</label>
+      <Input
+        type="text"
+        id="value"
+        name="value"
+        value={caseDetails.value}
+        onChange={handleInputChange}
+      />
+    </div>
+    <div>
+      <label htmlFor="condition" className="block text-sm font-medium text-gray-700">Condition</label>
+      <Select
+        name="condition"
+        value={caseDetails.condition}
+        onValueChange={(value) => handleInputChange({ target: { name: 'condition', value } } as any)}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select condition" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="Excellent">Excellent</SelectItem>
+          <SelectItem value="Good">Good</SelectItem>
+          <SelectItem value="Fair">Fair</SelectItem>
+          <SelectItem value="Poor">Poor</SelectItem>
+          <SelectItem value="Damaged">Damaged</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+    <div>
+      <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
+      <Select
+        name="status"
+        value={caseDetails.status}
+        onValueChange={(value) => handleInputChange({ target: { name: 'status', value } } as any)}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="Pre-Confiscated">Pre-Confiscated</SelectItem>
+          <SelectItem value="Confiscated">Confiscated</SelectItem>
+          <SelectItem value="Valuation">Valuation</SelectItem>
+          <SelectItem value="Disposed">Disposed</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  </CardContent>
+</Card>
 
         <Card>
           <CardHeader>

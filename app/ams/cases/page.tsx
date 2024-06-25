@@ -1,6 +1,9 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import { z } from "zod"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { PlusCircle } from "lucide-react"  // Import the icon
 
 import { columns } from "./components/columns"
 import { UserNav } from "./components/user-nav"
@@ -20,7 +23,6 @@ const assetSchema = z.object({
   status: z.string(),
   description: z.string(),
   type: z.string(),
-
 })
 
 export default async function Cases() {
@@ -61,6 +63,12 @@ export default async function Cases() {
             </p>
           </div>
           <div className="flex items-center space-x-2">
+            <Link href="/ams/cases/create">
+              <Button>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Create Case
+              </Button>
+            </Link>
             <UserNav />
           </div>
         </div>

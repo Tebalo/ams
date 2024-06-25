@@ -32,7 +32,7 @@ interface Asset {
 export async function getCasesByStatus(status: string) {
 
   try {
-    const response = await fetch(`${apiUrl}/assets?status=${encodeURIComponent(status)}`, {
+    const response = await fetch(`${apiUrl}/get-by-status?status=${encodeURIComponent(status)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -57,21 +57,19 @@ export async function getCasesByStatus(status: string) {
   }
 }
 
-export async function addAsset(formData: FormData) {
+interface AssetPayload {
+  name: string;
+  owner: string;
+  location: string;
+  code: string;
+  description: string;
+  value: string;
+  type: string;
+  condition: string;
+  status: string;
+}
 
-  // Extract data from FormData
-  const payload: AssetPayload = {
-    name: formData.get('name') as string,
-    owner: formData.get('owner') as string,
-    location: formData.get('location') as string,
-    code: formData.get('code') as string,
-    description: formData.get('description') as string,
-    value: formData.get('value') as string,
-    type: formData.get('type') as string,
-    condition: formData.get('condition') as string,
-    status: formData.get('status') as string,
-  };
-
+export async function createCase(payload: AssetPayload) {
   try {
     const response = await fetch(`${apiUrl}/assets`, {
       method: 'POST',
@@ -82,18 +80,22 @@ export async function addAsset(formData: FormData) {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
     }
 
     const result = await response.json();
 
     // Revalidate the assets page to reflect the new data
-    revalidatePath('/ams/assets');
+    revalidatePath('/ams/cases');
 
-    return { success: true, message: result.message };
+    return { success: true, message: result.message, data: result.data };
   } catch (error) {
     console.error('Error adding asset:', error);
-    return { success: false, message: 'Failed to add asset. Please try again.' };
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Failed to add asset. Please try again.' 
+    };
   }
 }
 
