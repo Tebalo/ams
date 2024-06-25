@@ -122,88 +122,100 @@ export function CreateCaseForm() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Asset Details</CardTitle>
-            <CardDescription>Provide specific details about the asset.</CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select asset type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Real Estate">Real Estate</SelectItem>
-                      <SelectItem value="Vehicle, Plant and Equipment">Vehicle, Plant and Equipment</SelectItem>
-                      <SelectItem value="Personal Effects">Personal Effects</SelectItem>
-                      <SelectItem value="Biological Assets">Biological Assets</SelectItem>
-                      <SelectItem value="Office equipment and furniture">Office equipment and furniture</SelectItem>
-                      <SelectItem value="Artefacts">Artefacts</SelectItem>
-                      <SelectItem value="Money">Money</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Value</FormLabel>
-                  <FormControl>
-                    <Input type="text" placeholder="Asset value" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="condition"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Condition</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Asset condition" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Pre-Confiscated">Pre-Confiscated</SelectItem>
-                      <SelectItem value="Confiscated">Confiscated</SelectItem>
-                      <SelectItem value="Valuation">Valuation</SelectItem>
-                      <SelectItem value="Disposed">Disposed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
+  <CardHeader>
+    <CardTitle>Asset Details</CardTitle>
+    <CardDescription>Provide specific details about the asset.</CardDescription>
+  </CardHeader>
+  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <FormField
+      control={form.control}
+      name="type"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Type</FormLabel>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder="Select asset type" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              <SelectItem value="Real Estate">Real Estate</SelectItem>
+              <SelectItem value="Vehicle, Plant and Equipment">Vehicle, Plant and Equipment</SelectItem>
+              <SelectItem value="Personal Effects">Personal Effects</SelectItem>
+              <SelectItem value="Biological Assets">Biological Assets</SelectItem>
+              <SelectItem value="Office equipment and furniture">Office equipment and furniture</SelectItem>
+              <SelectItem value="Artefacts">Artefacts</SelectItem>
+              <SelectItem value="Money">Money</SelectItem>
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="value"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Value</FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Asset value" {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="condition"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Condition</FormLabel>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder="Select asset condition" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              <SelectItem value="Excellent">Excellent</SelectItem>
+              <SelectItem value="Good">Good</SelectItem>
+              <SelectItem value="Fair">Fair</SelectItem>
+              <SelectItem value="Poor">Poor</SelectItem>
+              <SelectItem value="Very Poor">Very Poor</SelectItem>
+              <SelectItem value="Needs Repair">Needs Repair</SelectItem>
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="status"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Status</FormLabel>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              <SelectItem value="Pre-Confiscated">Pre-Confiscated</SelectItem>
+              <SelectItem value="Confiscated">Confiscated</SelectItem>
+              <SelectItem value="Valuation">Valuation</SelectItem>
+              <SelectItem value="Disposed">Disposed</SelectItem>
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </CardContent>
+</Card>
 
         <Card>
           <CardHeader>
