@@ -1,14 +1,18 @@
 import { getCaseById } from "@/lib/api"
 import { notFound } from "next/navigation"
 import { 
-  Info, MapPin, User, FileText, Calendar, DollarSign, 
+  Info, MapPin, User, FileText, Calendar, 
   Truck, FileCheck, BarChart2, Users, Clock
 } from 'lucide-react'
 import React, { ReactNode } from 'react';
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import { Edit, Trash2 } from 'lucide-react'
 import ActionButtons from "../components/ActionsButtons";
+// import { InfoItem } from "../components/InfoItem";
+// import { InfoCard } from "../components/InfoCard";
+
+import dynamic from 'next/dynamic'
+
+const InfoCard = dynamic(() => import('../components/InfoCard'), { ssr: false })
+const InfoItem = dynamic(() => import('../components/InfoItem'), { ssr: false })
 
 export const dynamicParams = true
 
@@ -24,29 +28,29 @@ interface InfoCardProps {
   }
 
 
-const InfoCard: React.FC<InfoCardProps> = ({ title, icon, children }) => (
-<div className="bg-white shadow-md rounded-lg p-6 mb-6">
-    <div className="flex items-center mb-4">
-    {icon}
-    <h2 className="text-xl font-semibold ml-2">{title}</h2>
-    </div>
-    <div className="grid grid-cols-2 gap-4">
-    {children}
-    </div>
-</div>
-);
+// const InfoCard: React.FC<InfoCardProps> = ({ title, icon, children }) => (
+// <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+//     <div className="flex items-center mb-4">
+//     {icon}
+//     <h2 className="text-xl font-semibold ml-2">{title}</h2>
+//     </div>
+//     <div className="grid grid-cols-2 gap-4">
+//     {children}
+//     </div>
+// </div>
+// );
 
 interface InfoItemProps {
     label: string;
     value: string | number | null | undefined;
 }
 
-const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => (
-    <div>
-        <p className="text-sm text-gray-600">{label}</p>
-        <p className="font-medium">{value || 'N/A'}</p>
-    </div>
-);
+// const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => (
+//     <div>
+//         <p className="text-sm text-gray-600">{label}</p>
+//         <p className="font-medium">{value || 'N/A'}</p>
+//     </div>
+// );
 
 export default async function CaseDetailsPage({ params }: { params: { id: string } }) {
     const caseCode = params.id

@@ -29,10 +29,10 @@ export default async function  AssetManagerDashboard(){
                         <Tabs defaultValue="overview" className="space-y-4">
                             <TabsList>
                                 <TabsTrigger value="overview">Overview</TabsTrigger>
-                                <TabsTrigger value="analytics">
+                                <TabsTrigger value="analytics" disabled>
                                     Analytics
                                 </TabsTrigger>
-                                <TabsTrigger value="reports">
+                                <TabsTrigger value="reports" disabled>
                                     Reports
                                 </TabsTrigger>
                             </TabsList>
