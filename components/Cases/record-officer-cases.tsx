@@ -15,7 +15,7 @@ export const RecordOfficerCases = async () => {
                     <div className="flex space-x-2">
                         <div className="p-2 space-y-2 w-64 items-center flex-1 justify-center border border-gray-200 rounded bg-gray-50">
                             <Label>My Work</Label>
-                            {/* <SelectTable userRole={"registration_officer"} /> */}
+                            {/* <SelectTable userRole={"record_officer"} /> */}
                         </div>
                     </div>
                 </div>

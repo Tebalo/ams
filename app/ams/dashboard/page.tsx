@@ -5,7 +5,6 @@ import { getRole} from "@/lib/auth";
 
 export default async function Dashboard(){
     const persona = await getRole();
-    console.log(persona)
     if(persona === 'record_officer'){
         return <RecordOfficerDashboard/>
     } else if(persona === 'finance_officer'){
