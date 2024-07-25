@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { createCase } from '@/lib/api'
+import axios from 'axios'
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -23,7 +24,8 @@ const formSchema = z.object({
   type: z.string().min(2, { message: "Type is required." }),
   condition: z.string().min(2, { message: "Condition is required." }),
   status: z.string().min(2, { message: "Status is required." }),
-})
+  file_link: z.instanceof(File).optional(),
+});
 
 export function CreateCaseForm() {
   const router = useRouter()
@@ -47,7 +49,25 @@ export function CreateCaseForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
     try {
-      await createCase(values)
+      let imagePath = null
+      if (values.file_link) {
+        const formData = new FormData()
+        formData.append('title', values.name)
+        formData.append('file', values.file_link)
+
+        const response = await axios.post('http://74.208.205.44:8084/api/documents/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        imagePath = response.data.file_path
+      }
+      console.log(imagePath)
+      const caseData = {
+        ...values,
+        file_link: imagePath
+      }
+      await createCase(caseData)
       router.push('/ams/cases')
     } catch (error) {
       console.error('Failed to create case:', error)
@@ -208,6 +228,7 @@ export function CreateCaseForm() {
               <SelectItem value="Confiscated">Confiscated</SelectItem>
               <SelectItem value="Valuation">Valuation</SelectItem>
               <SelectItem value="Disposed">Disposed</SelectItem>
+              {/* <SelectItem value="Case-Complete">Disposed</SelectItem> */}
             </SelectContent>
           </Select>
           <FormMessage />
@@ -231,6 +252,32 @@ export function CreateCaseForm() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Detailed description of the asset" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Asset Image</CardTitle>
+            <CardDescription>Upload an image of the asset.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="file_link"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => field.onChange(e.target.files ? e.target.files[0] : null)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

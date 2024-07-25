@@ -25,6 +25,7 @@ interface Profile {
 interface Session {
   auth: {
     access: string;
+    roles: number[];
   };
   profile: Profile;
 }
@@ -47,7 +48,7 @@ export async function getRole(): Promise<string> {
       redirect('/welcome');
     }
 
-    const roles = session.profile?.roles || [];
+    const roles = session.auth?.roles || [];
     const userRoles = roles.map(roleId => roleMap[roleId]).filter(Boolean);
 
     // Return the highest priority role the user has

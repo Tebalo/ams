@@ -27,31 +27,6 @@ interface InfoCardProps {
     children: ReactNode;
   }
 
-
-// const InfoCard: React.FC<InfoCardProps> = ({ title, icon, children }) => (
-// <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-//     <div className="flex items-center mb-4">
-//     {icon}
-//     <h2 className="text-xl font-semibold ml-2">{title}</h2>
-//     </div>
-//     <div className="grid grid-cols-2 gap-4">
-//     {children}
-//     </div>
-// </div>
-// );
-
-// interface InfoItemProps {
-//     label: string;
-//     value: string | number | null | undefined;
-// }
-
-// const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => (
-//     <div>
-//         <p className="text-sm text-gray-600">{label}</p>
-//         <p className="font-medium">{value || 'N/A'}</p>
-//     </div>
-// );
-
 export default async function CaseDetailsPage({ params }: { params: { id: string } }) {
     const caseCode = params.id
     const caseDetails = await getCaseById(caseCode)
@@ -81,6 +56,7 @@ export default async function CaseDetailsPage({ params }: { params: { id: string
                 <InfoItem label="Type" value={caseDetails.type} />
                 <InfoItem label="Value" value={caseDetails.value} />
                 <InfoItem label="Condition" value={caseDetails.condition} />
+                <InfoItem label="Picture" value={caseDetails.file_link} />
             </InfoCard>
 
             <InfoCard title="Location and Ownership" icon={<MapPin className="w-6 h-6 text-green-500" />}>

@@ -1,38 +1,46 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "./components/sidebar-nav"
 import { Home, FileText, DollarSign, ShoppingCart, Briefcase, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { LucideIcon } from 'lucide-react'
+import { getSession } from "@/lib/auth"
 
-const sidebarNavItems = [
+interface NavItem {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+  roles: string[];
+}
+
+const allNavItems: NavItem[] = [
   {
     title: "Pre Confiscations",
     href: "/ams/cases",
     icon: Home,
+    roles: ["record_officer", "manager", "finance_officer"],
   },
   {
     title: "Confiscations",
     href: "/ams/cases/confiscations",
     icon: FileText,
+    roles: ["record_officer", "manager"],
   },
   {
     title: "Valuations",
     href: "/ams/cases/valuations",
     icon: DollarSign,
+    roles: ["finance_officer", "manager"],
   },
   {
     title: "Disposals",
     href: "/ams/cases/disposals",
     icon: ShoppingCart,
+    roles: ["finance_officer", "manager"],
   },
-  // {
-  //   title: "Trust Fund",
-  //   href: "/ams/cases/trust-fund",
-  //   icon: Briefcase,
-  // },
 ]
 
 interface SettingsLayoutProps {
@@ -41,6 +49,34 @@ interface SettingsLayoutProps {
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [userRole, setUserRole] = useState<string | null>(null)
+  const [sidebarNavItems, setSidebarNavItems] = useState<NavItem[]>([])
+
+  useEffect(() => {
+    async function fetchSession() {
+      try {
+        const sessionData = await getSession();
+        console.log(sessionData)
+        if (sessionData && sessionData.auth.roles && sessionData.auth.roles.length > 0) {
+          setUserRole(sessionData.auth.roles[0])
+        }
+      } catch (error) {
+        console.error("Error fetching session:", error)
+      }
+    }
+
+    fetchSession()
+  }, [])
+
+
+  useEffect(() => {
+    if (userRole) {
+      const filteredItems = allNavItems.filter(item => 
+        item.roles.includes(userRole) || userRole === "manager"
+      )
+      setSidebarNavItems(filteredItems)
+    }
+  }, [userRole])
 
   return (
     <TooltipProvider>

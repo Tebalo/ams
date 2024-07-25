@@ -17,12 +17,12 @@ export const metadata: Metadata = {
 
 // Define the schema for an asset
 const assetSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  code: z.string(),
-  status: z.string(),
-  description: z.string(),
-  type: z.string(),
+  id: z.number().nullable(),
+  name: z.string().nullable(),
+  code: z.string().nullable(),
+  status: z.string().nullable(),
+  description: z.string().nullable(),
+  type: z.string().nullable(),
 })
 
 export default async function Cases() {
