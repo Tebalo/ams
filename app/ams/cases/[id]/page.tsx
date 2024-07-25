@@ -95,6 +95,7 @@ export default async function CaseDetailsPage({ params }: { params: { id: string
                 <InfoItem label="Replacement/Renewal Costs" value={caseDetails.replacement_renewal_costs} />
                 <InfoItem label="Disposal Costs" value={caseDetails.disposal_costs} />
                 <InfoItem label="Threshold Amount" value={caseDetails.threshhold_amount} />
+                <InfoItem label="Threshold Status" value={caseDetails.threshold_bool} />
                 <InfoItem label="Valuation Amount" value={caseDetails.valuation_amount} />
                 <InfoItem label="Valuation Report" value={caseDetails.valuation_report} />
             </InfoCard>

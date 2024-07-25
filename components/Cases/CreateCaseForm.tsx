@@ -55,7 +55,7 @@ export function CreateCaseForm() {
         formData.append('title', values.name)
         formData.append('file', values.file_link)
 
-        const response = await axios.post('https://74.208.205.44:8084/api/documents/', formData, {
+        const response = await axios.post('http://74.208.205.44:8084/api/documents/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
