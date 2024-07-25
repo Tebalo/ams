@@ -24,6 +24,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
         const details = await getCaseById(params.id)
         const session = await getSession();
         setCaseDetails(details);
+        console.log(session?.auth?.roles[0])
         setUserRole(session?.auth?.roles[0]);
       } catch (error) {
         console.error('Failed to fetch case details:', error)
@@ -288,7 +289,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
 
-        {userRole === 'finance_officer' || userRole === 'manager' && <Card>
+        {userRole !== 'record_officer' && <Card>
           <CardHeader>
             <CardTitle>Disposal Information</CardTitle>
           </CardHeader>
@@ -363,7 +364,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>}
 
-        {userRole === 'finance_officer' || userRole === 'manager' && <Card>
+        {userRole !== 'record_officer' && <Card>
           <CardHeader>
             <CardTitle>Valuation</CardTitle>
           </CardHeader>
