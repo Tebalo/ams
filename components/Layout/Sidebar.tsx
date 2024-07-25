@@ -9,7 +9,7 @@ const DynamicSidebar: React.FC = async () => {
     // const userRole = await getRole();
     const username = session?.profile?.first_name +' '+ session?.profile?.last_name || 'User'; // Adjust this based on your session structure
     const userRole = session?.auth?.roles[0];
-    console.log('USER',session?.auth?.roles[0])
+    // console.log('USER',session?.auth?.roles[0])
     return (
         <aside id="dynamic-sidebar" className="top-0 left-0 lg:w-52 shadow-xl transition-transform -translate-x-full sm:translate-x-0 hidden md:block" aria-label="Sidebar">
             <div className="h-screen px-0 bg-sky-400 shadow-lg rounded-r-lg flex flex-col">

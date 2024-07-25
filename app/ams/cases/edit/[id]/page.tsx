@@ -9,18 +9,22 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DatePicker } from "@/components/ui/date-picker"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { getSession } from '@/lib/auth'
 
 export default function EditCasePage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [caseDetails, setCaseDetails] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [userRole, setUserRole] = useState<any>(null)
 
   useEffect(() => {
     async function fetchCaseDetails() {
       try {
         const details = await getCaseById(params.id)
-        setCaseDetails(details)
+        const session = await getSession();
+        setCaseDetails(details);
+        setUserRole(session?.auth?.roles[0]);
       } catch (error) {
         console.error('Failed to fetch case details:', error)
       } finally {
@@ -284,7 +288,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
 
-        <Card>
+        {userRole === 'finance_officer' || userRole === 'manager' && <Card>
           <CardHeader>
             <CardTitle>Disposal Information</CardTitle>
           </CardHeader>
@@ -357,9 +361,9 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
                 />
             </div>
           </CardContent>
-        </Card>
+        </Card>}
 
-        <Card>
+        {userRole === 'finance_officer' || userRole === 'manager' && <Card>
           <CardHeader>
             <CardTitle>Valuation</CardTitle>
           </CardHeader>
@@ -445,7 +449,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
               />
             </div>
           </CardContent>
-        </Card>
+        </Card>}
 
         <div className="flex justify-end space-x-4">
           <Button type="button" variant="outline" onClick={() => router.back()}>
