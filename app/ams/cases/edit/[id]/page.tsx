@@ -210,7 +210,6 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
             />
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
             <CardTitle>Confiscation Details</CardTitle>
@@ -223,6 +222,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
                 setDate={handleDateChange('confiscation_date')}
               />
             </div>
+
             <div>
               <label htmlFor="case_number" className="block text-sm font-medium text-gray-700">Case Number</label>
               <Input
@@ -233,15 +233,128 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
                 onChange={handleInputChange}
               />
             </div>
+
+              <div>
+                <label htmlFor="planned_confiscation_date" className="block text-sm font-medium text-gray-700">Planned Confiscation Date</label>
+                <DatePicker
+                  date={caseDetails.planned_confiscation_date ? new Date(caseDetails.planned_confiscation_date) : undefined}
+                  setDate={handleDateChange('planned_confiscation_date')}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="decision" className="block text-sm font-medium text-gray-700">Decision</label>
+                <Select
+                  name="decision"
+                  value={caseDetails.decision}
+                  onValueChange={(value) => handleInputChange({ target: { name: 'decision', value } } as any)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select decision" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Abort-Confiscation">Abort-Confiscation</SelectItem>
+                    <SelectItem value="Confiscate">Confiscate</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label htmlFor="confiscation_reason" className="block text-sm font-medium text-gray-700">Confiscation Reason</label>
+                <Textarea
+                  id="confiscation_reason"
+                  name="confiscation_reason"
+                  value={caseDetails.confiscation_reason}
+                  onChange={handleInputChange}
+                  rows={2}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="decision_reason" className="block text-sm font-medium text-gray-700">Decision Reason</label>
+                <Textarea
+                  id="decision_reason"
+                  name="decision_reason"
+                  value={caseDetails.decision_reason}
+                  onChange={handleInputChange}
+                  rows={2}
+                />
+              </div>
+
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Disposal Information</CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="confiscation_reason" className="block text-sm font-medium text-gray-700">Confiscation Reason</label>
-              <Textarea
-                id="confiscation_reason"
-                name="confiscation_reason"
-                value={caseDetails.confiscation_reason}
-                onChange={handleInputChange}
-                rows={2}
+              <label htmlFor="disposal_date" className="block text-sm font-medium text-gray-700">Disposal Date</label>
+              <DatePicker
+                date={caseDetails.disposal_date ? new Date(caseDetails.disposal_date) : undefined}
+                setDate={handleDateChange('disposal_date')}
               />
+            </div>
+            <div>
+              <label htmlFor="disposal_amount" className="block text-sm font-medium text-gray-700">Disposal Amount</label>
+              <Input
+                type="text"
+                id="disposal_amount"
+                name="disposal_amount"
+                value={caseDetails.disposal_amount}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div>
+                <label htmlFor="disposal_method" className="block text-sm font-medium text-gray-700">Disposal Method</label>
+                <Select
+                  name="decision"
+                  value={caseDetails.disposal_method}
+                  onValueChange={(value) => handleInputChange({ target: { name: 'disposal_method', value } } as any)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Public Auction">Public Auction</SelectItem>
+                    <SelectItem value="Trust Fund">Trust Fund</SelectItem>
+                    <SelectItem value="Sealed Bid Sale">Sealed Bid Sale</SelectItem>
+                    <SelectItem value="Direct Sale">Direct Sale</SelectItem>
+                    <SelectItem value="Online Sales">Online Sales</SelectItem>
+                    <SelectItem value="Destruction">Destruction</SelectItem>
+                    <SelectItem value="Donation">Donation</SelectItem>
+                    <SelectItem value="Government Use">Government Use</SelectItem>
+                    <SelectItem value="Return to Victim">Return to Victim</SelectItem>
+                    <SelectItem value="Lease or Rent">Lease or Rent</SelectItem>
+                    <SelectItem value="Share Sale">Share Sale</SelectItem>
+                    <SelectItem value="Recycling">Recycling</SelectItem>
+                    <SelectItem value="Interagency Transfer">Interagency Transfer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label htmlFor="disposal_reason" className="block text-sm font-medium text-gray-700">Disposal Reason</label>
+                <Textarea
+                  id="disposal_reason"
+                  name="disposal_reason"
+                  value={caseDetails.disposal_reason}
+                  onChange={handleInputChange}
+                  rows={2}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="recipient" className="block text-sm font-medium text-gray-700">Recipient</label>
+                <Input
+                  type="text"
+                  id="recipient"
+                  name="recipient"
+                  value={caseDetails.recipient}
+                  onChange={handleInputChange}
+                />
             </div>
           </CardContent>
         </Card>
@@ -251,7 +364,7 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
             <CardTitle>Valuation</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+            <div>
               <label htmlFor="valuation_date" className="block text-sm font-medium text-gray-700">Valuation Date</label>
               <DatePicker
                 date={caseDetails.valuation_date ? new Date(caseDetails.valuation_date) : undefined}
@@ -265,6 +378,69 @@ export default function EditCasePage({ params }: { params: { id: string } }) {
                 id="valuation_amount"
                 name="valuation_amount"
                 value={caseDetails.valuation_amount}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="initial_assets_costs" className="block text-sm font-medium text-gray-700">Initial Assets Costs</label>
+              <Input
+                type="text"
+                id="initial_assets_costs"
+                name="initial_assets_costs"
+                value={caseDetails.initial_assets_costs}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="operations_costs" className="block text-sm font-medium text-gray-700">Operations Costs</label>
+              <Input
+                type="text"
+                id="operations_costs"
+                name="operations_costs"
+                value={caseDetails.operations_costs}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="maintenance_repair_costs" className="block text-sm font-medium text-gray-700">Maintenance Repair Costs</label>
+              <Input
+                type="text"
+                id="maintenance_repair_costs"
+                name="maintenance_repair_costs"
+                value={caseDetails.maintenance_repair_costs}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="replacement_renewal_costs" className="block text-sm font-medium text-gray-700">Replacement/Renewal Costs</label>
+              <Input
+                type="text"
+                id="replacement_renewal_costs"
+                name="replacement_renewal_costs"
+                value={caseDetails.replacement_renewal_costs}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="disposal_costs" className="block text-sm font-medium text-gray-700">Disposal Costs</label>
+              <Input
+                type="text"
+                id="disposal_costs"
+                name="disposal_costs"
+                value={caseDetails.disposal_costs}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="threshhold_amount" className="block text-sm font-medium text-gray-700">Threshold Amount</label>
+              <Input
+                type="text"
+                id="threshhold_amount"
+                name="threshhold_amount"
+                value={caseDetails.threshhold_amount}
                 onChange={handleInputChange}
               />
             </div>

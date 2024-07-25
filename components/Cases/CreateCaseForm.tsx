@@ -18,7 +18,7 @@ const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   owner: z.string().min(2, { message: "Owner must be at least 2 characters." }),
   location: z.string().min(2, { message: "Location is required." }),
-  code: z.string().regex(/^C-\d{4}$/, { message: "Code must be in the format C-XXXX where X is a digit." }),
+  code: z.string().min(2, { message: "Code is required." }),
   description: z.string().min(10, { message: "Description must be at least 10 characters." }),
   value: z.string().regex(/^\d+(\.\d{1,2})?$/, { message: "Value must be a valid number." }),
   type: z.string().min(2, { message: "Type is required." }),
@@ -37,7 +37,7 @@ export function CreateCaseForm() {
       name: "",
       owner: "",
       location: "",
-      code: "",
+      code: "C-XXXX",
       description: "",
       value: "",
       type: "",
@@ -104,9 +104,14 @@ export function CreateCaseForm() {
               name="code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Code</FormLabel>
+                  <FormLabel>Asset Code Auto-generated..</FormLabel>
                   <FormControl>
-                    <Input placeholder="C-XXXX" {...field} />
+                    <Input 
+                      placeholder="C-XXXX" 
+                      {...field} 
+                      readOnly 
+                      className="bg-gray-100 cursor-not-allowed"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
